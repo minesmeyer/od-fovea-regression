@@ -101,4 +101,8 @@ def demo_od_fovea_detection(args):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     demo_od_fovea_detection(parser.parse_args())
+=======
+   demo(sys.argv[1])
+>>>>>>> 10362d2c84c15106be82a305416bfa0d7ad936bd
