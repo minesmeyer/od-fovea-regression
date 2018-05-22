@@ -1,26 +1,47 @@
 """ Example run od the OD and Fovea detector """
 
 #!/usr/bin/python
-import sys, getopt
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, img_as_float, transform
-import os
-import sys
 
 from util.unet_triclass_whole_image import unet
 import util.od_coords as odc
 
+import argparse
 
-image_dir = '/home/mmeyer/Documents/Projects/Retina/Datasets/DRIDB/AnonimDatabase2/OrigImages/OrigImg0006.bmp'
-# mask_dir = '/home/mmeyer/Documents/Projects/Retina/Datasets/MESSIDOR_Fovea/' \
-#            'fov_masks/20060407_43436_0200_PP_test_mask.gif'
+parser = argparse.ArgumentParser(description='OD Fovea detection')
+
+parser.add_argument('-i',
+                    '--img_dir',
+                    help='Image_dir',
+                    type=str,
+                    default='messidor_example.tif')
+
+parser.add_argument('-m',
+                    '--mask_dir',
+                    help='Mask dir',
+                    type=str,
+                    default=None)
+
+def crop_image(img, mask):
+    # Crop the image
+    b = np.nonzero(mask)
+    up, bot = np.amin(b[0]), np.amax(b[0])
+    left, right = np.amin(b[1]), np.amax(b[1])
+    cr_img = img[up:bot, left:right]
+    return cr_img
+
+def get_original_coords(coords, mask):
+    b = np.nonzero(mask)
+    up, bot = np.amin(b[0]), np.amax(b[0])
+    left, right = np.amin(b[1]), np.amax(b[1])
+
+    new_coords = (coords[0] + up, coords[1] + left)
+    return new_coords
 
 
-def demo(image_dir):
-
+def demo_od_fovea_detection(args):
 
     ## Define the model and load the pre-trained weights
     weights_file = 'best_weights.h5'
@@ -32,14 +53,20 @@ def demo(image_dir):
 
     ## Load the image
 
-    img = img_as_float(io.imread(image_dir))
+    img = img_as_float(io.imread(args.img_dir))
 
-    img_to_pred = transform.resize(img, (512,512), order=0, mode='constant')
+    if args.mask_dir is not None:
+        mask = img_as_float(io.imread(args.mask_dir))
+        img_crop = crop_image(img, mask)
+        img_to_pred = transform.resize(img_crop, (512, 512), order=0, mode='constant')
+    else:
+        img_to_pred = transform.resize(img, (512,512), order=0, mode='constant')
+
     img_to_pred = (img_to_pred - img_to_pred.mean(axis=(0,1))) / (img_to_pred.std(axis=(0,1)))
 
     ## Get the location prediction
 
-    dist_map_pred = m1.predict(img_to_pred[np.newaxis,:,:,:])
+    dist_map_pred = m1.predict(img_to_pred[np.newaxis, : :, :])
     pred_map = dist_map_pred[0,:,:,0]
 
     ## Get the OD and Fovea locations from this distance map
@@ -48,8 +75,15 @@ def demo(image_dir):
     od_coords, fov_coords = odc.determine_od(img, peak_coords, neigh=12)
 
     ## Get the coordinated in the original resolution
-    od_resh = odc.get_new_peaks(od_coords, img.shape[:2])
-    f_resh = odc.get_new_peaks(fov_coords, img.shape[:2])
+    if args.mask_dir is not None:
+        od_resh = odc.get_new_peaks(od_coords, img_crop.shape[:2])
+        f_resh = odc.get_new_peaks(fov_coords, img_crop.shape[:2])
+
+        od_resh = get_original_coords(od_resh, mask)
+        f_resh = get_original_coords(f_resh, mask)
+    else:
+        od_resh = odc.get_new_peaks(od_coords, img.shape[:2])
+        f_resh = odc.get_new_peaks(fov_coords, img.shape[:2])
 
     print('===> OD coordinates: ', od_resh)
     print('===> FOVEA coordinates: ', f_resh)
@@ -65,5 +99,6 @@ def demo(image_dir):
     ax[1].plot(fov_coords[1], fov_coords[0], 'r.')
     plt.show()
 
+
 if __name__ == "__main__":
-   demo(sys.argv[1])
+    demo_od_fovea_detection(parser.parse_args())
