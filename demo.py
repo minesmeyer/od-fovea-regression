@@ -13,12 +13,6 @@ import sys
 from util.unet_triclass_whole_image import unet
 import util.od_coords as odc
 
-
-image_dir = '/home/mmeyer/Documents/Projects/Retina/Datasets/DRIDB/AnonimDatabase2/OrigImages/OrigImg0006.bmp'
-# mask_dir = '/home/mmeyer/Documents/Projects/Retina/Datasets/MESSIDOR_Fovea/' \
-#            'fov_masks/20060407_43436_0200_PP_test_mask.gif'
-
-
 def demo(image_dir):
 
 
