@@ -35,7 +35,7 @@ or a mask of the FOV provided. (This script saves an image to a results/ folder,
 
     python demo.py --img_dir images/messidor_test.tif --mask_dir images/messidor_test_mask.tif
 
-![](images/messidor_test_prediction.png =250x)
+![](images/messidor_test_prediction.png){ width: 200px; }
 
 
 ---------------------------------- 
