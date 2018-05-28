@@ -99,6 +99,15 @@ def demo_od_fovea_detection(args):
     ax[1].plot(fov_coords[1], fov_coords[0], 'r.')
     plt.show()
 
+    plt.figure(figsize=(10, 10))
+    plt.imshow(img)
+    plt.plot(od_resh[1], od_resh[0], 'b.')
+    plt.plot(f_resh[1], f_resh[0], 'r.')
+    plt.title('Predicted location of OD (blue) and Fovea (red)')
+    plt.xlabel('OD: ( {0}, {1})    Fovea: ({2}, {3}) '.format(od_resh[0], od_resh[1],
+                f_resh[0], f_resh[1]))
+    plt.savefig('results/demo.tif')
+
 
 if __name__ == "__main__":
 
