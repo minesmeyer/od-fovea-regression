@@ -41,6 +41,7 @@ def get_original_coords(coords, mask):
     return new_coords
 
 
+
 def demo_od_fovea_detection(args):
 
     ## Define the model and load the pre-trained weights
