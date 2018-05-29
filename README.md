@@ -56,9 +56,7 @@ Evaluating
 
 To obtain the resulting predictions on Messidor, use the `predict_od_fov.py` file, specifying which split is being used 
 and the directory holding the weights of the model:
-```
-example of a call
-```
+
 
 Predicting OD and Fovea Location on a Single Image
 ------------------------
