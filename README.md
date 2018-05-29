@@ -30,7 +30,7 @@ To get the resulting predictions on Messidor, use the *predict_od_fov.py* file, 
 Running for single image
 ------------------------
 
-The pre-trained weights of the model are in the file *best_weights.h5*. They can be loaded directly, but should not be used to evaluate on Messidor, since the model was trained as described in the points abov. The example image in the *images/* folder are from the test set of the particular split this model was trained on.
+The pre-trained weights of the model are in the file *best_weights.h5*. They can be loaded directly, but should not be used to evaluate on Messidor, since the model was trained as described in the points above. The example image in the *images/* folder is from the test set of the particular split this model was trained on.
 
 You can run the *demo.py* script, which takes a retinal image and returns the location of the OD and Fovea. When possible, the images should be cropped around the FOV, 
 or a mask of the FOV provided. (This script saves an image to a results/ folder, ensure there is one in your directory).
