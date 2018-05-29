@@ -4,24 +4,22 @@ import skimage.io as io
 import os
 import pandas as pd
 
+from scipy.ndimage.morphology import binary_erosion
+
 from util.unet_triclass_whole_image import unet
 import util.od_coords as odc
-import util.data_preproc as pre
+import util.util as ut
 
 # Turn interactive plotting off
 plt.ioff()
 
-from scipy.ndimage.morphology import binary_erosion
 
 # #### TESTING ON SPLIT 1 OF MESSIDOR
 data_dir = '../messidor_od_fovea/split1/resized/test/'
 
-test_dir = '../messidor_od_fovea/split1/resized/test/' \
-           'images/'
 masks_dir = '../messidor_od_fovea/split1/test/'
 
-b_dir = 'gdt/'
-a_dir = 'images/'
+test_dir = os.path.join(data_dir, 'images/')
 
 model_dir = 'results/Messidor_split1/messidor_split1/'
 
@@ -36,15 +34,16 @@ resized_coordinates = {'Image_File_Name': [],
                        'fovea-x-coordinate': [], 'fovea-y-coordinate': [],
                        'od_x_coords': [], 'od_y_coords': []}
 
+ut.create_dir('results/Preds_test_decay7/')
 
-ut.cre
 for fl in sorted(os.listdir(test_dir)):
 
     resized_coordinates['Image_File_Name'].append(fl)
 
     # Predict peak location (in 512x512)
     img = io.imread(test_dir + fl)
-    img_to_pred = pre.znorm(img)
+    img_to_pred = ((img_to_pred - img_to_pred.mean(axis=(0,1))) /
+                   (img_to_pred.std(axis=(0,1))))
 
     dist_map_pred = m1.predict(img_to_pred[np.newaxis,:,:,:])
     pred_map = dist_map_pred[0,:,:,0]
@@ -92,10 +91,7 @@ for fl in sorted(os.listdir(test_dir)):
     resized_coordinates['od_y_coords'].append(od_resh[0])
     resized_coordinates['od_x_coords'].append(od_resh[1])
 
-    # resized_coordinates['flag_fail'].append(flag_fail)
-
     fig, ax = plt.subplots(1,2, figsize=(15,10))
-    # plt.figure(figsize=(10, 10))
     ax[0].imshow(img)
     ax[0].plot(od_resh[1], od_resh[0], 'b.')
     ax[0].plot(f_resh[1], f_resh[0], 'r.')
