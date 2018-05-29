@@ -13,8 +13,7 @@ In particular, we make use of the a U-net architecture, while using a loss funct
 Training 
 --------
 
-The method was trained and validated on the Messidor dataset. If you wish to replicate, the first step is to exclude the Messidor images that do not contain OD and Fovea 
-location information , as provided by [1].
+The method was trained and validated on the Messidor dataset. If you wish to replicate, the first step is to exclude the Messidor images that do not contain OD and Fovea location information , as provided by [1] (http://www.uhu.es/retinopathy/eng/bd.php).
 
 Split the remaining 1136 images in two (*half 1* and *half 2*) and train your model in two different splits:
 * **Split 1** will use *half 1*  for training and *half 2* for testing;
