@@ -5,8 +5,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, img_as_float, transform
 
+from skimage import filters, color
+from skimage.measure import regionprops, label
+from skimage.morphology import erosion, dilation, disk
+
+
 from util.unet_triclass_whole_image import unet
 import util.od_coords as odc
+import util.util as ut
 
 import argparse
 
@@ -24,8 +30,13 @@ parser.add_argument('-m',
                     type=str,
                     default=None)
 
+parser.add_argument('-e',
+                    '--estimate_fov',
+                    action='store_true')
+
+# Define auxiliary functions
 def crop_image(img, mask):
-    # Crop the image
+    """ Crops the image to the edges of a given FOV mask. """
     b = np.nonzero(mask)
     up, bot = np.amin(b[0]), np.amax(b[0])
     left, right = np.amin(b[1]), np.amax(b[1])
@@ -33,6 +44,7 @@ def crop_image(img, mask):
     return cr_img
 
 def get_original_coords(coords, mask):
+    """ Get the landmark coordinates for the original resolution. """
     b = np.nonzero(mask)
     up, bot = np.amin(b[0]), np.amax(b[0])
     left, right = np.amin(b[1]), np.amax(b[1])
@@ -40,7 +52,33 @@ def get_original_coords(coords, mask):
     new_coords = (coords[0] + up, coords[1] + left)
     return new_coords
 
+def get_mask_fov(image):
+    """ Estimate a FOV mask from the original image by simple thresholding. """
 
+    im = color.rgb2gray(image)
+    im = filters.rank.enhance_contrast(im, disk(5))
+    im = filters.gaussian(im, 2)
+
+    val = filters.threshold_otsu(im)
+
+    mask = np.zeros(im.shape)
+    mask[np.where(im < val)] = 1
+
+    # apply closing operation to minimize the contamination with single pixels
+    mask = dilation(mask, selem=disk(5))
+    mask = erosion(mask, selem=disk(5))
+
+    label_image = label(mask)
+
+    # select the largest connected component as the background
+    props = regionprops(label_image)
+    pp = [props[i].area for i in range(len(props))]
+
+    mask_new = np.ones(label_image.shape)
+    # np.argmax(pp)+1 because label_image also considers 0, but props does not
+    mask_new[np.where(label_image == np.unique(label_image)[np.argmax(pp)+1])] = 0
+
+    return mask_new
 
 def demo_od_fovea_detection(args):
 
@@ -60,6 +98,10 @@ def demo_od_fovea_detection(args):
         mask = img_as_float(io.imread(args.mask_dir))
         img_crop = crop_image(img, mask)
         img_to_pred = transform.resize(img_crop, (512, 512), order=0, mode='constant')
+    elif args.estimate_fov is not False:
+        mask = get_mask_fov(img)
+        img_crop = crop_image(img, mask)
+        img_to_pred = transform.resize(img_crop, (512, 512), order=0, mode='constant')
     else:
         img_to_pred = transform.resize(img, (512,512), order=0, mode='constant')
 
@@ -76,7 +118,7 @@ def demo_od_fovea_detection(args):
     od_coords, fov_coords = odc.determine_od(img, peak_coords, neigh=12)
 
     ## Get the coordinated in the original resolution
-    if args.mask_dir is not None:
+    if (args.mask_dir is not None) or (args.estimate_fov is not False):
         od_resh = odc.get_new_peaks(od_coords, img_crop.shape[:2])
         f_resh = odc.get_new_peaks(fov_coords, img_crop.shape[:2])
 
@@ -107,9 +149,10 @@ def demo_od_fovea_detection(args):
     plt.title('Predicted location of OD (blue) and Fovea (red)')
     plt.xlabel('OD: ( {0}, {1})    Fovea: ({2}, {3}) '.format(od_resh[0], od_resh[1],
                 f_resh[0], f_resh[1]))
+
+    ut.create_dir('results/')
     plt.savefig('results/demo.tif')
 
 
 if __name__ == "__main__":
-
     demo_od_fovea_detection(parser.parse_args())
