@@ -134,7 +134,7 @@ class TwoImageIterator(Iterator):
         else:
             img_shape = (ch,) + size
 
-        return img_shape.
+        return img_shape
 
     def _load_img_pair(self, idx):
     """
