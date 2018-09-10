@@ -38,8 +38,8 @@ def check_EarlyStop(vloss, tr_loss, patience=5):
 # #### TRAINING ON SPLIT 1 OF MESSIDOR
 data_dir = '../messidor_od_fovea/split1/resized/'
 
-a_tr, b_tr = 'train/images/', 'train/images/'
-a_val, b_val = 'val/images/', 'val/images/'
+a_tr, b_tr = 'train/images/', 'train/gdt/'
+a_val, b_val = 'val/images/', 'val/gdt/'
 
 # ## For Messidor
 nsamples = 455
