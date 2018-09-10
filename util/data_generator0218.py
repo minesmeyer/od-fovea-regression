@@ -137,28 +137,28 @@ class TwoImageIterator(Iterator):
         return img_shape
 
     def _load_img_pair(self, idx):
-    """
-    Load images and apply pre-processing
-    :param idx: index of file to load in the list of names
-    :return: aa: image
-             bb: ground truth
-    """
-    aa = img_as_float(io.imread(os.path.join(self.a_dir, self.a_fnames[idx])))
-    bb = img_as_float(io.imread(os.path.join(self.b_dir, self.b_fnames[idx])))
+        """
+        Load images and apply pre-processing
+        :param idx: index of file to load in the list of names
+        :return: aa: image
+                 bb: ground truth
+        """
+        aa = img_as_float(io.imread(os.path.join(self.a_dir, self.a_fnames[idx])))
+        bb = img_as_float(io.imread(os.path.join(self.b_dir, self.b_fnames[idx])))
 
-    if self.nch_gdt == 3:
-        # fix for the case when the .png has an alpha channel
-        if bb.shape[-1] == 4:
-            bb = bb[:,:,:3]
-    elif self.nch_gdt == 1:
-        # fix for the case when the .png has an alpha channel
-        if len(bb.shape) == 2:
-            bb = bb[:,:,np.newaxis]
+        if self.nch_gdt == 3:
+            # fix for the case when the .png has an alpha channel
+            if bb.shape[-1] == 4:
+                bb = bb[:,:,:3]
+        elif self.nch_gdt == 1:
+            # fix for the case when the .png has an alpha channel
+            if len(bb.shape) == 2:
+                bb = bb[:,:,np.newaxis]
 
-    if self.select_vessels is True:
-        bb = self.select_vessel_width(bb)
+        if self.select_vessels is True:
+            bb = self.select_vessel_width(bb)
 
-    return aa, bb
+        return aa, bb
 
     def _random_transform(self, a, b, is_batch=False):
         """
