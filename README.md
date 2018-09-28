@@ -4,12 +4,8 @@ Here you can find the implementation of a new strategy for the task of simultane
 fovea in eye fundus images. This method has been accepted for publication in MICCAI 2018. If you find this code useful 
 for your research, please consider citing our paper:
 
-    @article{meyer2018odfovea,
-    title={A Pixel-wise Distance Regression Approach for Joint Retinal Optical Disc and Fovea Detection},
-    author={Meyer, Maria Ines and Galdran, Adrian and Mendonça, Ana Maria and Campilho, Aurélio},
-    journal= {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
-    year={2018}
-    }
+> Meyer M.I., Galdran A., Mendonça A.M., Campilho A.. A Pixel-Wise Distance Regression Approach for Joint Retinal Optical Disc and Fovea Detection. In: Medical Image Computing and Computer Assisted Intervention – MICCAI 2018, LNCS, vol 11071, pp 39-47, 2018. doi:10.1007/978-3-030-00934-2_5
+
 
 Introduction
 ------------
