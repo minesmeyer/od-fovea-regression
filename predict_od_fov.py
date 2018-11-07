@@ -50,7 +50,7 @@ for fl in sorted(os.listdir(test_dir)):
 
     peak_coords = odc.get_peak_coordinates(pred_map, threshold=0.2)
 
-    od_coords, fov_coords = odc.determine_od(img, peak_coords, neigh=9)
+    od_coords, fov_coords = odc.determine_od(img_to_pred, peak_coords, neigh=9)
 
     print(od_coords, fov_coords)
 
