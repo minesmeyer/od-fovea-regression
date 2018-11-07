@@ -115,9 +115,9 @@ def demo_od_fovea_detection(args):
     ## Get the OD and Fovea locations from this distance map
 
     peak_coords = odc.get_peak_coordinates(pred_map, threshold=0.2)
-    od_coords, fov_coords = odc.determine_od(img, peak_coords, neigh=12)
+    od_coords, fov_coords = odc.determine_od(img_to_pred, peak_coords, neigh=12)
 
-    ## Get the coordinated in the original resolution
+    ## Get the coordinates in the original resolution
     if (args.mask_dir is not None) or (args.estimate_fov is not False):
         od_resh = odc.get_new_peaks(od_coords, img_crop.shape[:2])
         f_resh = odc.get_new_peaks(fov_coords, img_crop.shape[:2])
