@@ -24,7 +24,7 @@ Installation
 ------------
 To install all the requirements to run this code, first clone this repository to your local machine:
 ```
-git clone https://github.com/minesmeyer/od-fovea-regression.git .
+git clone https://github.com/minesmeyer/od-fovea-regression.git 
 ```
 
 If you have an Anaconda installation, you can use the `conda` package manager as follows:
