@@ -31,7 +31,6 @@ git clone https://github.com/minesmeyer/od-fovea-regression.git
 
 If you have an Anaconda installation, you can use the `conda` package manager as follows:
 ```
-~~conda create --name env_name --file requirements.txt~~
 conda env create -f environment.yml
 ```
 where `env_name` is the name you want to use for creating a `conda` environment.
