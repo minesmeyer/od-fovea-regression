@@ -1,11 +1,13 @@
 # Joint Retinal Optical Disc and Fovea Detection
 
 Here you can find the implementation of a new strategy for the task of simultaneously locating the optic disc and the 
-fovea in eye fundus images. This method has been accepted for publication in MICCAI 2018. If you find this code useful 
+fovea in eye fundus images. This method was presented at MICCAI 2018 in Granada (oral presentation). If you find this code useful 
 for your research, please consider citing our paper:
 
 > Meyer M.I., Galdran A., Mendonça A.M., Campilho A.. A Pixel-Wise Distance Regression Approach for Joint Retinal Optical Disc and Fovea Detection. In: Medical Image Computing and Computer Assisted Intervention – MICCAI 2018, LNCS, vol 11071, pp 39-47, 2018. doi:10.1007/978-3-030-00934-2_5
 
+### Update (April 2020)
+I have added an **environment.yml** file with the updated requirements such that the demo works as expected. Note that the training and prediction scripts were not tested with the new updated libraries, since I have stopped working on this project. Please take this into account when running the code!
 
 Introduction
 ------------
@@ -29,7 +31,8 @@ git clone https://github.com/minesmeyer/od-fovea-regression.git
 
 If you have an Anaconda installation, you can use the `conda` package manager as follows:
 ```
-conda create --name env_name --file requirements.txt
+~~conda create --name env_name --file requirements.txt~~
+conda env create -f environment.yml
 ```
 where `env_name` is the name you want to use for creating a `conda` environment.
 
@@ -84,7 +87,7 @@ python demo.py --img_dir images/messidor_test.tif --estimate_fov
 
 ---------------------------------- 
 
- 
+
 --------
     
 ### References

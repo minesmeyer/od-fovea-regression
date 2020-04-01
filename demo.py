@@ -22,13 +22,13 @@ parser.add_argument('-i',
                     '--img_dir',
                     help='Image_dir',
                     type=str,
-                    default='messidor_example.tif')
+                    default='images/messidor_test.tif')
 
 parser.add_argument('-m',
                     '--mask_dir',
                     help='Mask dir',
                     type=str,
-                    default=None)
+                    default= 'images/messidor_test_mask.tif')
 
 parser.add_argument('-e',
                     '--estimate_fov',
@@ -151,7 +151,7 @@ def demo_od_fovea_detection(args):
                 f_resh[0], f_resh[1]))
 
     ut.create_dir('results/')
-    plt.savefig('results/demo.tif')
+    plt.savefig('results/demo.png')
 
 
 if __name__ == "__main__":

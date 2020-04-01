@@ -148,16 +148,16 @@ def get_peak_coordinates(image, threshold=0.2):
         while new_blobs.shape[0] < 2:
 
             threshold = 0.8 * threshold
-            print threshold
+            print(threshold)
             if threshold < 0.001:
-                print 'Threshold too low! Passing...'
+                print('Threshold too low! Passing...')
                 break
             else:
                 new_blobs = blob_log(image, min_sigma=10, max_sigma=50,
                                      threshold=threshold)
 
         blobs = new_blobs
-        print blobs.shape
+        print(blobs.shape)
         if blobs.shape[0] < 2:
             np.concatenate((blobs, [[256, 256, 0]]), axis=0)
 

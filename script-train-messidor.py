@@ -164,7 +164,7 @@ for e in range(epoch, nb_epochs):
 
     if (e >= epoch+50) and (e % 50 == 0):
         if check_EarlyStop(losses['val'], losses['train'], patience=50) == 'early_stop':
-            print ('Decreasing learning rate to lr= %f' % (lr/2))
+            print('Decreasing learning rate to lr= %f' % (lr/2))
             K.set_value(m1.optimizer.lr, lr/2)
         else:
             pass
